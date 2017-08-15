@@ -48,6 +48,15 @@ export default class FirstRn extends Component {
         let pic = {
             uri: 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg'
         };
+        let platform = require('Platform');
+
+        //平台名字name
+        let osName;
+        if (platform.OS === 'android'){
+            osName = 'android';
+        }else {
+            osName = 'ios';
+        }
         return (
             <View style={styles.container}>
                 <Text style={styles.welcome}>
@@ -61,7 +70,7 @@ export default class FirstRn extends Component {
                     Shake or press menu button for dev menu
                 </Text>
                 <Blink text='i love u dhl'/>
-                <Greeting name='ronindong'/>
+                <Greeting name={osName} />
                 <Image source={pic} style={{width: 193, height: 110}}/>
 
             </View>
@@ -74,7 +83,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#F5FCFF',
+        backgroundColor: '#a5aCFF',
     },
     welcome: {
         fontSize: 20,
