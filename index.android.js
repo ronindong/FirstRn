@@ -12,6 +12,8 @@ import {
     Image,
     View
 } from 'react-native';
+import BaseFlexDirection from './app/Component/BaseFlexDirection.js'
+import TextComponent from './app/Component/TextComponent.js'
 
 class Greeting extends Component {
     render() {
@@ -49,26 +51,6 @@ class Blink extends Component {
 
 }
 
-class BaseFlexDirection extends Component {
-    render() {
-
-        return (
-            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                <View style={{flex: 1, backgroundColor: '#94af46'}}/>
-                <View style={{flex: 1, backgroundColor: '#15aCFF'}}/>
-                <View style={{flex: 1, backgroundColor: '#ac5153'}}/>
-
-                <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}>
-                    <View style={{flex: 1, backgroundColor: '#afa075'}}/>
-                    <View style={{flex: 1, backgroundColor: '#eb64ff'}}/>
-                    <View style={{flex: 1, backgroundColor: '#3fac74'}}/>
-                </View>
-            </View>
-        );
-    }
-}
-
-
 export default class FirstRn extends Component {
 
     constructor() {
@@ -77,7 +59,7 @@ export default class FirstRn extends Component {
     }
 
     pressClick() {
-        this.state.cText="click";
+        this.state.cText = "click";
         alert('click')
 
     }
@@ -101,12 +83,13 @@ export default class FirstRn extends Component {
         return (
             <View style={styles.container}>
                 <Text style={styles.welcome} onPress={() => this.pressClick()}>
-                   hello {display}
+                    hello {display}
                 </Text>
                 <Blink text='go go go ...'/>
                 <Greeting name={osName}/>
                 <Image source={pic} style={{width: 193, height: 110}}/>
-                <BaseFlexDirection/>
+                {/*<BaseFlexDirection/>*/}
+                <TextComponent>alskjl</TextComponent>
             </View>
         );
     }
@@ -119,6 +102,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#a5aCFF',
+        padding: 3,
+        margin: 4,
+
     },
     welcome: {
         fontSize: 20,
