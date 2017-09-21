@@ -39,7 +39,5 @@ const styles = StyleSheet.create({
 
         },
     }
-    )
-;
-
-export default TextComponent;
+    );
+export {TextComponent as default}

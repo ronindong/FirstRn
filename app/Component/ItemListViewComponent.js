@@ -19,5 +19,5 @@ class ItemListViewComponent extends Component {
 
 }
 
-export default ItemListViewComponent
+export {ItemListViewComponent as default}
 
