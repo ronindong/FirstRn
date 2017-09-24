@@ -20,5 +20,4 @@ class BaseFlexDirection extends Component {
         );
     }
 }
-
-export default BaseFlexDirection
+export {BaseFlexDirection as default}
