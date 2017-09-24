@@ -106,6 +106,7 @@ const styles = StyleSheet.create({
         margin: 4,
 
     },
+
     welcome: {
         fontSize: 20,
         textAlign: 'center',

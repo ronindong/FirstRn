@@ -10,103 +10,62 @@ import {
     StyleSheet,
     Text,
     Image,
-    View
+    View,
+    ListView,
 } from 'react-native';
-
-class Greeting extends Component {
-    render() {
-        return (
-            <Text>Hello {this.props.name}!</Text>
-        );
-    }
-
-}
-
-class Blink extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {showText: true}
-
-        setInterval(() => {
-            this.setState(previousState => {
-                return {showText: !previousState.showText}
-            });
-        }, 3000)
-    }
-
-
-    onPressClick() {
-        this.props.text = 'click text'
-    }
-
-    render() {
-        let display = this.state.showText ? this.props.text : ' '
-        return (
-            <Text onPress={() => this.onPressClick()}>{display}</Text>
-        );
-    }
-
-
-}
-
-class BaseFlexDirection extends Component {
-    render() {
-
-        return (
-            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-              <View style={{flex: 1, backgroundColor: '#94af46'}}/>
-              <View style={{flex: 1, backgroundColor: '#15aCFF'}}/>
-              <View style={{flex: 1, backgroundColor: '#ac5153'}}/>
-
-              <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}>
-                <View style={{flex: 1, backgroundColor: '#afa075'}}/>
-                <View style={{flex: 1, backgroundColor: '#eb64ff'}}/>
-                <View style={{flex: 1, backgroundColor: '#3fac74'}}/>
-              </View>
-            </View>
-        );
-    }
-}
 
 
 export default class FirstRn extends Component {
 
-    constructor() {
-        super();
-        this.state = {cText: "Learning React Native!"}
+    constructor(props) {
+        super(props);
+        let movies = [
+            {title: 'ask来绞股蓝'},
+            {title: '危机扩散'},
+            {title: '爱上女奥尔'},
+            {title: '女没你事'},
+            {title: '女没你事'},
+            {title: '女没你事'},
+            {title: '女没你事'},
+            {title: '爱上公开拉垃圾'},
+            {title: '爱上公开拉垃圾'},
+        ];
+
+        let dataSource = new ListView.DataSource({
+            rowHasChanged: (row1, row2) => row1 != row2
+        });
+
+        this.state = {
+            movies: dataSource.cloneWithRows(movies)
+        };
     }
 
-    pressClick() {
-        this.state.cText="click";
-        alert('click')
+    renderMovieList(movie) {
 
+        return (
+            <View style={[styles.item]}>
+                <View>
+                    <Image style={styles.itemImage}
+                           source={{uri: 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg'}}/>
+                </View>
+                <View>
+                    <Text style={styles.itemText}>
+                        {movie.title}
+                    </Text>
+                </View>
+
+            </View>);
     }
+
 
     render() {
-        let pic = {
-            uri: 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg'
-        };
-        let platform = require('Platform');
-
-        //平台名字name
-        let osName;
-        if (platform.OS === 'android') {
-            osName = 'android';
-        } else {
-            osName = 'ios';
-        }
-
-        let display = this.state.cText;
 
         return (
             <View style={styles.container}>
-              <Text style={styles.welcome} onPress={() => this.pressClick()}>
-                hello {display}
-              </Text>
-              <Blink text='go go go ...'/>
-              <Greeting name={osName}/>
-              <Image source={pic} style={{width: 193, height: 110}}/>
-              <BaseFlexDirection/>
+
+                <ListView dataSource={this.state.movies}
+                          renderRow={this.renderMovieList}/>
+
             </View>
         );
     }
@@ -114,12 +73,52 @@ export default class FirstRn extends Component {
 }
 
 const styles = StyleSheet.create({
+
+    itemImage: {
+        width: 100,
+        height: 120,
+    },
+    item: {
+        backgroundColor: '#fff',
+        borderWidth: 1,
+        borderColor: '#6435c9',
+        margin: 6,
+        padding: 10,
+    },
+    itemOne: {},
+    itemTwo: {
+        // alignSelf:'center',
+        // flex: 1,
+    },
+    itemThree: {},
+    itemText: {
+        fontSize: 23,
+        fontWeight: '300',
+        color: '#6435c9',
+        paddingTop: 20,
+        paddingBottom: 20,
+    },
+
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
+        // justifyContent: 'flex-start',
+        // alignItems: 'flex-end',
         backgroundColor: '#a5aCFF',
+        // padding: 3,
+        marginTop: 20,
+        borderWidth: 1,
+        // borderColor: '#eae311',
+        // borderRadius: 15,
+        shadowColor: '#23a921',
+        shadowOpacity: 0.6,
+        shadowRadius: 2,
+        shadowOffset: {
+            height: 1, width: 0
+        }
+
+
     },
+
     welcome: {
         fontSize: 20,
         textAlign: 'center',
