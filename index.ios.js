@@ -53,7 +53,6 @@ export default class FirstRn extends Component {
                         {movie.title}
                     </Text>
                 </View>
-
             </View>);
     }
 

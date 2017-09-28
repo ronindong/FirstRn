@@ -10,86 +10,90 @@ import {
     StyleSheet,
     Text,
     Image,
-    View
+    View,
+    ListView,
+    TouchableHighlight,
 } from 'react-native';
-import BaseFlexDirection from './app/Component/BaseFlexDirection.js'
-import TextComponent from './app/Component/TextComponent.js'
 
-class Greeting extends Component {
-    render() {
-        return (
-            <Text>Hello {this.props.name}!</Text>
-        );
-    }
-
-}
-
-class Blink extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {showText: true}
-
-        setInterval(() => {
-            this.setState(previousState => {
-                return {showText: !previousState.showText}
-            });
-        }, 3000)
-    }
-
-
-    onPressClick() {
-        this.props.text = 'click text'
-    }
-
-    render() {
-        let display = this.state.showText ? this.props.text : ' '
-        return (
-            <Text onPress={() => this.onPressClick()}>{display}</Text>
-        );
-    }
-
-
-}
-
+console.ignoredYellowBox = ['Remote debugger'];
 export default class FirstRn extends Component {
 
-    constructor() {
-        super();
-        this.state = {cText: "Learning React Native!"}
+    constructor(props) {
+        super(props);
+        let url = "http://api.douban.com/v2/movie/top250";
+        let ds = new ListView.DataSource({
+            rowHasChanged: (row1, row2) => row1 !== row2
+        });
+        this.state = {
+            infoList: ds.cloneWithRows([]),
+        };
+        FirstRn.get(url, (ret) => {
+            this.setState({
+                infoList: ds.cloneWithRows(ret.subjects),
+            });
+        });
     }
 
-    pressClick() {
-        this.state.cText = "click";
-        alert('click')
-
+    static get(url, callback) {
+        fetch(url)
+            .then((response) => response.json())
+            .then((json) => {
+                callback(json);
+            })
+            .catch(err => {
+                console.log(err);
+            }).done();
     }
+
+    static _onPress() {
+        console.log('')
+    }
+
+
+    renderMovieList(info) {
+        return (
+            <TouchableHighlight
+                activeOpacity={0.9}
+                onPress={() => this._onPress}>
+                <View style={[styles.item]}>
+                    <View>
+                        <Image style={styles.itemImage}
+                               source={{uri: info.images.large}}/>
+                    </View>
+                    <View>
+                        <Text style={styles.itemText}>
+                            {info.title}
+                        </Text>
+                        <Text style={styles.itemText}>{info.year}</Text>
+                    </View>
+                    {() => this.getTextView(info)}
+                </View>
+            </TouchableHighlight>
+        );
+    }
+
+    getTextView(info) {
+        let texts = [];
+        for (let i = 0; i < 2; i++) {
+            texts.push(
+                <View>
+                    <Text style={styles.itemText}>{info.title}</Text>
+                    {/*<Text style={styles.itemText}>{info.year}</Text>*/}
+                </View>
+            );
+        }
+        return texts
+    }
+
 
     render() {
-        let pic = {
-            uri: 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg'
-        };
-        let platform = require('Platform');
-
-        //平台名字name
-        let osName;
-        if (platform.OS === 'android') {
-            osName = 'android';
-        } else {
-            osName = 'ios';
-        }
-
-        let display = this.state.cText;
 
         return (
             <View style={styles.container}>
-                <Text style={styles.welcome} onPress={() => this.pressClick()}>
-                    hello {display}
-                </Text>
-                <Blink text='go go go ...'/>
-                <Greeting name={osName}/>
-                <Image source={pic} style={{width: 193, height: 110}}/>
-                {/*<BaseFlexDirection/>*/}
-                <TextComponent>alskjl</TextComponent>
+                <ListView dataSource={this.state.infoList}
+                          renderRow={this.renderMovieList}
+                          enableEmptySections={true}/>
+
             </View>
         );
     }
@@ -97,13 +101,45 @@ export default class FirstRn extends Component {
 }
 
 const styles = StyleSheet.create({
+
+    itemImage: {
+        width: 100,
+        height: 120,
+    },
+    item: {
+        flex:1,
+        flexDirection:'row',
+        backgroundColor: '#fff',
+        borderWidth: 1,
+        borderColor: '#6435c9',
+        margin: 6,
+        padding: 10,
+    },
+    itemText: {
+        fontSize: 20,
+        fontWeight: '300',
+        color: '#6435c9',
+        paddingTop: 10,
+        paddingBottom: 10,
+    },
+
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
+        // justifyContent: 'flex-start',
+        // alignItems: 'flex-end',
         backgroundColor: '#a5aCFF',
-        padding: 3,
-        margin: 4,
+        // padding: 3,
+        // marginTop: 20,
+        borderWidth: 1,
+        // borderColor: '#eae311',
+        // borderRadius: 15,
+        shadowColor: '#23a921',
+        shadowOpacity: 0.6,
+        shadowRadius: 2,
+        shadowOffset: {
+            height: 1, width: 0
+        }
+
 
     },
 
